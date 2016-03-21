@@ -10,7 +10,7 @@ var scale = 30;
 var xPos = 70;
 var yPos = 100;
 
-var color = 'black';
+var color = '#156B78';
 
 //base
 var base = new Rectangle(xPos,yPos,baseWidth*scale,baseHeight*scale);
