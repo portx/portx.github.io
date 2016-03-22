@@ -11,11 +11,17 @@ var xPos = 70;
 var yPos = 100;
 
 var color = '#156B78';
+var thick = 2;
+var thin = 1;
+
+
+
 
 //base
 var base = new Rectangle(xPos,yPos,baseWidth*scale,baseHeight*scale);
 var path = new Path.Rectangle(base);
 path.strokeColor = color;
+
 
 //jack1
 var jack1 = new Rectangle(xPos+baseWidth*scale,yPos,jackPitch*scale,baseHeight*scale);
@@ -44,6 +50,7 @@ path_fin3.strokeColor = color;
 var fin4 = new Rectangle(xPos+baseWidth*scale+2*(jackPitch*scale)-(jackPitch*scale/2),yPos+baseHeight*scale,jackPitch*scale/2,finHeight*scale);
 var path_fin4 = new Path.Rectangle(fin4);
 path_fin4.strokeColor = color;
+
 
 
 /*
