@@ -49,23 +49,23 @@ outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale/2, blueprint.
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale/2, blueprint.yPos-portx.finHeight*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale, blueprint.yPos-portx.finHeight*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale, blueprint.yPos));
-outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+portx.jackHeight*blueprint.scale, blueprint.yPos));
+//outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+portx.jackHeight*blueprint.scale, blueprint.yPos));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-(portx.jackHeight*blueprint.scale/2), blueprint.yPos));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-(portx.jackHeight*blueprint.scale/2), blueprint.yPos-portx.finHeight*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos-portx.finHeight*blueprint.scale));
-outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos));
-outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale));
+//outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos));
+//outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale+portx.finHeight*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-(portx.jackHeight*blueprint.scale/2), blueprint.yPos+portx.length*blueprint.scale+portx.finHeight*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-(portx.jackHeight*blueprint.scale/2), blueprint.yPos+portx.length*blueprint.scale));
-outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+portx.jackHeight*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale));
+//outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+portx.jackHeight*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale+portx.finHeight*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale/2, blueprint.yPos+portx.length*blueprint.scale+portx.finHeight*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale/2, blueprint.yPos+portx.length*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos, blueprint.yPos+portx.length*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos, blueprint.yPos));
-
+//outerPath.selected=true;
 
 console.log(outerPath.segments[0].point.x);
 console.log(outerPath.segments.length);
@@ -90,7 +90,7 @@ recc.strokeColor='red';
 //cv.selected=true;
 
 //create function for chamfer/round corner
-function chamfer(oPath){
+function chamfer(oPath, radius){
   //..
 
   tp = new Point();
@@ -102,8 +102,8 @@ function chamfer(oPath){
     tp = oPath.segments[i].point;
     console.log(tp);
 
-    arcFrom = oPath.getPointAt(oPath.getOffsetOf(tp)+5);
-    arcTo = oPath.getPointAt(oPath.getOffsetOf(tp)-5)
+    arcFrom = oPath.getPointAt(oPath.getOffsetOf(tp)+radius);
+    arcTo = oPath.getPointAt(oPath.getOffsetOf(tp)-radius)
 
     console.log(arcFrom);
     spotter =Path.Circle(arcFrom,2);
@@ -112,13 +112,24 @@ function chamfer(oPath){
     spotter =Path.Circle(arcTo,2);
     spotter.fillColor='blue';
 
+    var sk = new Path.Line(arcFrom,arcTo);
+    sk.strokeColor = 'yellow';
+    sk.smooth();
+
+    var cv = new Path.Arc({
+      from:arcFrom,
+      through:[arcTo.x+radius/4,arcFrom.y+radius/4],
+      to:arcTo,
+      strokeColor: 'black'
+    });
+
   }
 
 
 
 }
 
-chamfer (outerPath);
+chamfer (outerPath, 10);
 
 /*
 var arc1 = new Path.Arc(100,100,200,250,300,300);
