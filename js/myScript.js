@@ -43,7 +43,7 @@ path_fin4.strokeColor = blueprint.color;
 
 //Main Outline
 var outerPath = new Path();
-outerPath.strokeColor = 'black';
+//outerPath.strokeColor = 'black';
 outerPath.add(new Point(blueprint.xPos,blueprint.yPos));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale/2, blueprint.yPos));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale/2, blueprint.yPos-portx.finHeight*blueprint.scale));
@@ -67,72 +67,79 @@ outerPath.add(new Point(blueprint.xPos, blueprint.yPos+portx.length*blueprint.sc
 outerPath.add(new Point(blueprint.xPos, blueprint.yPos));
 //outerPath.selected=true;
 
-console.log(outerPath.segments[0].point.x);
-console.log(outerPath.segments.length);
 
-/*
-outerPath.onMouseEnter = function(event) {
-  this.strokeWidth = 2;
-}
-outerPath.onMouseLeave = function(event) {
-  this.strokeWidth = 1;
-}*/
-/*
-var cv = new Path.Arc({
-  from:[blueprint.xPos,blueprint.yPos+5],
-  through:[blueprint.xPos+2,blueprint.yPos+1],
-  to:[blueprint.xPos+5,blueprint.yPos],
-  strokeColor: 'black'
-});
-var recc = new Path.Rectangle(new Rectangle(blueprint.xPos+2,blueprint.yPos+1,0.5,0.5));
-recc.strokeColor='red';
-*/
-//cv.selected=true;
+var roundOuterPath = roundedCorner (outerPath, blueprint.scale/3);
+roundOuterPath.strokeColor='black';
 
-//create function for chamfer/round corner
-function chamfer(oPath, radius){
-  //..
+
+function roundedCorner(oPath, radius){//function for Rounded Corners
+
+  //color = oPath.strokeColor;
+  //oPath.strokeColor = null;//removing the original path from view -- 'VANISH'
+  var roundedPath = new Path();
+  //roundedPath.strokeColor = color;
 
   tp = new Point();
-  var spotter = new Path.Rectangle();
-  spotter.strokeColor='red';
-  var arcFrom,arcTo;
+  var arcFrom,arcTo,arcThrough;
 
+  //Mother Loop ----------------------------------------------------------------
   for(var i = 0;i < oPath.segments.length-1; i++){
     tp = oPath.segments[i].point;
-    console.log(tp);
+    arcTo = oPath.getPointAt(oPath.getOffsetOf(tp)+radius);
+    if(i>0){
+      arcFrom = oPath.getPointAt(oPath.getOffsetOf(tp)-radius);
+    } else{
+      arcFrom = oPath.getPointAt(oPath.length-radius);
+    }
 
-    arcFrom = oPath.getPointAt(oPath.getOffsetOf(tp)+radius);
-    arcTo = oPath.getPointAt(oPath.getOffsetOf(tp)-radius)
+    console.log('PUC: index=['+i+'] point: '+tp);
+    console.log('arcFrom['+(oPath.getOffsetOf(tp)+radius)+']'+arcFrom);
+    console.log('arcTo['+(oPath.getOffsetOf(tp)-radius)+']'+arcTo);
+    //console.log(arcFrom.x+radius/4,arcTo.y+radius/4);
 
-    console.log(arcFrom);
-    spotter =Path.Circle(arcFrom,2);
-    spotter.fillColor='red';
+    //spotter =Path.Circle(arcFrom,2);
+    //spotter.fillColor='red';
 
-    spotter =Path.Circle(arcTo,2);
-    spotter.fillColor='blue';
+    //spotter =Path.Circle(arcTo,2);
+    //spotter.fillColor='blue';
 
-    var sk = new Path.Line(arcFrom,arcTo);
-    sk.strokeColor = 'yellow';
-    sk.smooth();
+    //var sk = new Path.Line(arcFrom,arcTo);
+    //sk.strokeColor = 'yellow';
+    //sk.smooth();
 
+    if(i==0){
+      arcThrough = new Point(oPath.getPointAt(oPath.getOffsetOf(tp)+radius/4).x,oPath.getPointAt(oPath.length-radius/4).y);
+      console.log('cv through: ',arcThrough);
+      console.log('');
+    } else if(i%2!=0){
+      arcThrough = new Point(oPath.getPointAt(oPath.getOffsetOf(tp)-radius/4).x,oPath.getPointAt(oPath.getOffsetOf(tp)+radius/4).y);
+      console.log('cv through: ',arcThrough);
+      console.log('');
+    } else if(i%2==0){
+      arcThrough = new Point(oPath.getPointAt(oPath.getOffsetOf(tp)+radius/4).x,oPath.getPointAt(oPath.getOffsetOf(tp)-radius/4).y);
+      console.log('cv through: ',arcThrough);
+      console.log('');
+    }
+
+    /*
+    //draw the curve
     var cv = new Path.Arc({
       from:arcFrom,
-      through:[arcTo.x+radius/4,arcFrom.y+radius/4],
+      through:arcThrough,
       to:arcTo,
-      strokeColor: 'black'
+      strokeColor: color
     });
+    */
 
-  }
+    //draw the lines
+    roundedPath.add(new Point(arcFrom));
+    roundedPath.arcTo(arcThrough,arcTo);
+    //adding the last line
+    if(i==oPath.segments.length-2){
+      roundedPath.add(new Point(oPath.getPointAt(oPath.length-radius)));
+    }
+  }//end of Mother loop --------------------------------------------------------
 
+  return roundedPath;
 
-
-}
-
-chamfer (outerPath, 10);
-
-/*
-var arc1 = new Path.Arc(100,100,200,250,300,300);
-arc1.strokeColor = 'black';
-arc1.selected = true;
-*/
+}//end of function
