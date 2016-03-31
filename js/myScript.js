@@ -3,7 +3,13 @@ var laptop = { length:14, width:10 };
 var portx = { length: laptop.length-2, width: laptop.width, jackHeight:6, finHeight:2 };
 var blueprint = { xPos:70, yPos:100, color:'#156B78', scale:30, strokeThickness:1 };
 
+var line1 = new Path.Line(blueprint.xPos+portx.width*blueprint.scale,blueprint.yPos,blueprint.xPos+portx.width*blueprint.scale,blueprint.yPos+portx.length*blueprint.scale);
+line1.strokeColor='black';
+line1.dashArray = [2,4];
 
+var line2 = new Path.Line(blueprint.xPos+portx.width*blueprint.scale+portx.jackHeight*blueprint.scale, blueprint.yPos, blueprint.xPos+portx.width*blueprint.scale+portx.jackHeight*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale);
+line2.strokeColor='black';
+line2.dashArray = [2,4];
 
 /*
 //base
@@ -43,17 +49,22 @@ path_fin4.strokeColor = blueprint.color;
 
 //Main Outline
 var outerPath = new Path();
-//outerPath.strokeColor = 'black';
+//outerPath.strokeColor = 'yellow';
 outerPath.add(new Point(blueprint.xPos,blueprint.yPos));
-outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale/2, blueprint.yPos));
+outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale/3, blueprint.yPos));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale/2, blueprint.yPos-portx.finHeight*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale, blueprint.yPos-portx.finHeight*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale, blueprint.yPos));
 //outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+portx.jackHeight*blueprint.scale, blueprint.yPos));
-outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-(portx.jackHeight*blueprint.scale/2), blueprint.yPos));
+outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-(portx.jackHeight*3*blueprint.scale/4), blueprint.yPos));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-(portx.jackHeight*blueprint.scale/2), blueprint.yPos-portx.finHeight*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos-portx.finHeight*blueprint.scale));
-//outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos));
+
+outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos-2));
+outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-40, blueprint.yPos-2));
+outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-40, blueprint.yPos+2));
+outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos+2));
+
 //outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale+portx.finHeight*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-(portx.jackHeight*blueprint.scale/2), blueprint.yPos+portx.length*blueprint.scale+portx.finHeight*blueprint.scale));
@@ -70,9 +81,13 @@ outerPath.add(new Point(blueprint.xPos, blueprint.yPos));
 
 var roundOuterPath = roundedCorner (outerPath, blueprint.scale/3);
 roundOuterPath.strokeColor='black';
+roundOuterPath.strokeWidth= 2;
 
 
 function roundedCorner(oPath, radius){//function for Rounded Corners
+
+  var OriginalRadius = radius;
+
 
   //color = oPath.strokeColor;
   //oPath.strokeColor = null;//removing the original path from view -- 'VANISH'
@@ -84,6 +99,18 @@ function roundedCorner(oPath, radius){//function for Rounded Corners
 
   //Mother Loop ----------------------------------------------------------------
   for(var i = 0;i < oPath.segments.length-1; i++){
+    //checking for quick turns - they fuck up corner radius
+    radius = OriginalRadius;
+    if(i>0 && i<oPath.segments.length-2){
+    if(oPath.getOffsetOf(oPath.segments[i].point)+radius>oPath.getOffsetOf(oPath.segments[i+1].point) || (oPath.getOffsetOf(oPath.segments[i].point)-radius<oPath.getOffsetOf(oPath.segments[i-1].point))){
+      console.log("TADA!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      radius = 2;
+    } else {
+      radius = OriginalRadius;
+    }
+  }
+
+
     tp = oPath.segments[i].point;
     arcTo = oPath.getPointAt(oPath.getOffsetOf(tp)+radius);
     if(i>0){
@@ -91,6 +118,8 @@ function roundedCorner(oPath, radius){//function for Rounded Corners
     } else{
       arcFrom = oPath.getPointAt(oPath.length-radius);
     }
+
+
 
     console.log('PUC: index=['+i+'] point: '+tp);
     console.log('arcFrom['+(oPath.getOffsetOf(tp)+radius)+']'+arcFrom);
