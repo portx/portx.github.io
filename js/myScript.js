@@ -1,8 +1,28 @@
 
 var laptop = { length:14, width:10 }; // in inches
-var portx = { length: laptop.length-2, width: laptop.width, jackHeight:6, finHeight:2, jackBase:4, lockBase:1.2, lockHeight:0.8 };
 var blueprint = { xPos:150, yPos:100, color:'#156B78', scale:30, strokeThickness:1 };
+var portx = { length: laptop.length-2, width: laptop.width, jackHeight:6, finHeight:2, jackBase:4, lockBase:1.2, lockHeight:0.8, lockSlope:10 };
+portx.lockSlope = Math.sqrt(Math.pow(portx.lockHeight,2)+Math.pow(portx.lockBase,2));
+//grid
+for(var i = 0; i < document.getElementById("myCanvas").width/2; i+=10){
+  var grid1 = new Path.Line(i,0,i,document.getElementById("myCanvas").height/2);
+  grid1.strokeColor = 'black';
+  grid1.strokeColor.alpha = '0.02';
+}
+for(var i = 0; i < document.getElementById("myCanvas").height/2; i+=10){
+  var grid1 = new Path.Line(0,i,document.getElementById("myCanvas").width/2,i);
+  grid1.strokeColor = 'black';
+  grid1.strokeColor.alpha = '0.02';
+}
 
+//text labels
+var text = new PointText(new Point(blueprint.xPos+portx.width*blueprint.scale/2, blueprint.yPos+portx.length*blueprint.scale/2));
+text.fillColor = '#59192A';
+text.content = 'a';
+text.fontFamily = 'ocr A Std';
+text.fontSize = 1*blueprint.scale;
+
+//dotted fold lines
 var line1 = new Path.Line(blueprint.xPos+portx.width*blueprint.scale,blueprint.yPos,blueprint.xPos+portx.width*blueprint.scale,blueprint.yPos+portx.length*blueprint.scale);
 line1.strokeColor='#156B78';
 line1.dashArray = [2,3];
@@ -18,6 +38,22 @@ line3.dashArray = [2,3];
 var line4 = new Path.Line(blueprint.xPos, blueprint.yPos+portx.length*blueprint.scale, blueprint.xPos+(portx.width+2*portx.jackHeight)*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale);
 line4.strokeColor = '#156B78';
 line4.dashArray = [2,3];
+
+var line5 = new Path.Line(blueprint.xPos+portx.lockBase*blueprint.scale,blueprint.yPos+portx.length*blueprint.scale/4,blueprint.xPos+portx.lockBase*blueprint.scale,blueprint.yPos+portx.length*blueprint.scale-portx.length*blueprint.scale/4);
+line5.strokeColor = '#156B78';
+line5.dashArray = [2,3];
+
+var line6 = new Path.Line(blueprint.xPos, blueprint.yPos+portx.length*blueprint.scale-portx.length*blueprint.scale/4, blueprint.xPos, blueprint.yPos+portx.length*blueprint.scale/4);
+line6.strokeColor = '#156B78';
+line6.dashArray = [2,3];
+
+var line7 = new Path.Line(blueprint.xPos-portx.lockSlope*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale-portx.length*blueprint.scale/4, blueprint.xPos-portx.lockSlope*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale/4);
+line7.strokeColor = '#156B78';
+line7.dashArray = [2,3];
+
+var line8 = new Path.Line(blueprint.xPos-portx.lockSlope*blueprint.scale-portx.lockHeight*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale-portx.length*blueprint.scale/4, blueprint.xPos-portx.lockSlope*blueprint.scale-portx.lockHeight*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale/4);
+line8.strokeColor = '#156B78';
+line8.dashArray = [2,3];
 
 /*
 //base
@@ -98,28 +134,44 @@ outerPath.add(new Point(blueprint.xPos+portx.lockBase*blueprint.scale, blueprint
 outerPath.add(new Point(blueprint.xPos, blueprint.yPos+portx.length*blueprint.scale));
 //locks
 outerPath.add(new Point(blueprint.xPos, blueprint.yPos+portx.length*blueprint.scale-portx.length*blueprint.scale/4));
-outerPath.add(new Point(blueprint.xPos-(Math.sqrt(Math.pow(portx.lockHeight*blueprint.scale,2)+Math.pow(portx.lockBase*blueprint.scale,2)))-(portx.lockHeight*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale-portx.length*blueprint.scale/4));
-outerPath.add(new Point(blueprint.xPos-(Math.sqrt(Math.pow(portx.lockHeight*blueprint.scale,2)+Math.pow(portx.lockBase*blueprint.scale,2)))-(portx.lockHeight*blueprint.scale)-(portx.lockBase*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale-portx.length*blueprint.scale/4-portx.lockBase*blueprint.scale));
-outerPath.add(new Point(blueprint.xPos-(Math.sqrt(Math.pow(portx.lockHeight*blueprint.scale,2)+Math.pow(portx.lockBase*blueprint.scale,2)))-(portx.lockHeight*blueprint.scale)-(portx.lockBase*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale/4+portx.lockBase*blueprint.scale));
-outerPath.add(new Point(blueprint.xPos-(Math.sqrt(Math.pow(portx.lockHeight*blueprint.scale,2)+Math.pow(portx.lockBase*blueprint.scale,2)))-(portx.lockHeight*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale/4));
+outerPath.add(new Point(blueprint.xPos-portx.lockSlope*blueprint.scale-(portx.lockHeight*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale-portx.length*blueprint.scale/4));
+outerPath.add(new Point(blueprint.xPos-portx.lockSlope*blueprint.scale-(portx.lockHeight*blueprint.scale)-(portx.lockBase*2/3*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale-portx.length*blueprint.scale/4-portx.lockBase*2/3*blueprint.scale));
+outerPath.add(new Point(blueprint.xPos-portx.lockSlope*blueprint.scale-(portx.lockHeight*blueprint.scale)-(portx.lockBase*2/3*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale/4+portx.lockBase*2/3*blueprint.scale));
+outerPath.add(new Point(blueprint.xPos-portx.lockSlope*blueprint.scale-(portx.lockHeight*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale/4));
 outerPath.add(new Point(blueprint.xPos, blueprint.yPos+portx.length*blueprint.scale/4));
 
 outerPath.add(new Point(blueprint.xPos, blueprint.yPos));
-//outerPath.selected=true;
-
+outerPath.strokeColor='black';
+outerPath.strokeColor.alpha = '0.3';
 
 var roundOuterPath = roundedCorner (outerPath, blueprint.scale/3);
 roundOuterPath.strokeColor='#156B78';
-roundOuterPath.strokeWidth= 2;
+roundOuterPath.strokeWidth= 1;
 
+//guides
 var guides = new Path();
 guides.add(new Point(blueprint.xPos+portx.width*blueprint.scale-portx.jackBase*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale));
 guides.add(new Point(blueprint.xPos+portx.width*blueprint.scale-portx.jackBase/2*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale+(Math.sqrt(Math.pow(portx.jackHeight*blueprint.scale, 2)-Math.pow(portx.jackBase*blueprint.scale/2, 2)))));
 guides.add(new Point(blueprint.xPos+portx.width*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale));
 guides.strokeColor='red';
+guides.strokeColor.alpha = '0.3';
 
 var jjjj = new Path.Circle(blueprint.xPos+portx.width*blueprint.scale,blueprint.yPos+portx.length*blueprint.scale,portx.jackHeight*blueprint.scale);
-jjjj.strokeColor='blue';
+var arcG = new Path();
+for(var i=jjjj.length*3/7; i<jjjj.length*7/8; i+=10){
+  arcG.add(new Point(jjjj.getPointAt(i)));
+}
+arcG.strokeColor = 'blue';
+arcG.strokeColor.alpha = '0.3';
+
+var guides2 = new Path.Line(blueprint.xPos+portx.lockBase*blueprint.scale, blueprint.yPos, blueprint.xPos+portx.lockBase*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale);
+guides2.strokeColor = 'red';
+guides2.strokeColor.alpha = '0.3';
+
+var guides3 = new Path.Line(blueprint.xPos+portx.lockBase*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale, blueprint.xPos+portx.width*blueprint.scale-portx.jackBase/2*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale+(Math.sqrt(Math.pow(portx.jackHeight*blueprint.scale, 2)-Math.pow(portx.jackBase*blueprint.scale/2, 2))));
+guides3.strokeColor = 'black';
+guides3.strokeColor.alpha = '0.3';
+//<-- guides
 
 function roundedCorner(oPath, radius){//function for Rounded Corners ###########
 
@@ -131,7 +183,7 @@ function roundedCorner(oPath, radius){//function for Rounded Corners ###########
   var roundedPath = new Path();
   //roundedPath.strokeColor = color;
 
-  tp = new Point();
+  tp = new Point(); //temporary point - PUC - point under consideration
   var arcFrom,arcTo,arcThrough;
 
   //Mother Loop ----------------------------------------------------------------
@@ -164,10 +216,12 @@ function roundedCorner(oPath, radius){//function for Rounded Corners ###########
     //console.log(arcFrom.x+radius/4,arcTo.y+radius/4);
 
     //spotter =Path.Circle(arcFrom,2);
-    //spotter.fillColor='red';
+    //spotter.fillColor='black';
+    //spotter.fillColor.alpha = '0.3';
 
     //spotter =Path.Circle(arcTo,2);
-    //spotter.fillColor='blue';
+    //spotter.fillColor='black';
+    //spotter.fillColor.alpha = '0.3';
 
     //var sk = new Path.Line(arcFrom,arcTo);
     //sk.strokeColor = 'yellow';
