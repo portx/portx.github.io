@@ -1,15 +1,23 @@
 
-var laptop = { length:14, width:10 };
-var portx = { length: laptop.length-2, width: laptop.width, jackHeight:6, finHeight:2 };
+var laptop = { length:14, width:10 }; // in inches
+var portx = { length: laptop.length-2, width: laptop.width, jackHeight:6, finHeight:2, jackBase:4, lockBase:2, lockHeight:3 };
 var blueprint = { xPos:70, yPos:100, color:'#156B78', scale:30, strokeThickness:1 };
 
 var line1 = new Path.Line(blueprint.xPos+portx.width*blueprint.scale,blueprint.yPos,blueprint.xPos+portx.width*blueprint.scale,blueprint.yPos+portx.length*blueprint.scale);
-line1.strokeColor='black';
-line1.dashArray = [2,4];
+line1.strokeColor='#156B78';
+line1.dashArray = [2,3];
 
 var line2 = new Path.Line(blueprint.xPos+portx.width*blueprint.scale+portx.jackHeight*blueprint.scale, blueprint.yPos, blueprint.xPos+portx.width*blueprint.scale+portx.jackHeight*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale);
-line2.strokeColor='black';
-line2.dashArray = [2,4];
+line2.strokeColor='#156B78';
+line2.dashArray = [2,3];
+
+var line3 = new Path.Line(blueprint.xPos, blueprint.yPos, blueprint.xPos+(portx.width+2*portx.jackHeight)*blueprint.scale, blueprint.yPos);
+line3.strokeColor = '#156B78';
+line3.dashArray = [2,3];
+
+var line4 = new Path.Line(blueprint.xPos, blueprint.yPos+portx.length*blueprint.scale, blueprint.xPos+(portx.width+2*portx.jackHeight)*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale);
+line4.strokeColor = '#156B78';
+line4.dashArray = [2,3];
 
 /*
 //base
@@ -59,32 +67,53 @@ outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale, blueprint.yP
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-(portx.jackHeight*3*blueprint.scale/4), blueprint.yPos));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-(portx.jackHeight*blueprint.scale/2), blueprint.yPos-portx.finHeight*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos-portx.finHeight*blueprint.scale));
-
+//cut 1 on jack
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos-2));
-outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-40, blueprint.yPos-2));
-outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-40, blueprint.yPos+2));
+outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-portx.finHeight/2*blueprint.scale, blueprint.yPos-2));
+outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-portx.finHeight/2*blueprint.scale, blueprint.yPos+2));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos+2));
+//cut 2 on jack
+outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale-2));
+outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-portx.finHeight/2*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale-2));
+outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-portx.finHeight/2*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale+2));
+outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale+2));
+
 
 //outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale+portx.finHeight*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-(portx.jackHeight*blueprint.scale/2), blueprint.yPos+portx.length*blueprint.scale+portx.finHeight*blueprint.scale));
-outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-(portx.jackHeight*blueprint.scale/2), blueprint.yPos+portx.length*blueprint.scale));
+outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+2*(portx.jackHeight*blueprint.scale)-(portx.jackHeight*3*blueprint.scale/4), blueprint.yPos+portx.length*blueprint.scale));
 //outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale+portx.jackHeight*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale+portx.finHeight*blueprint.scale));
+//Put inclined cut here
+outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale-portx.jackBase*blueprint.scale+2+(portx.finHeight*portx.jackBase/(2*portx.jackHeight))*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale+portx.finHeight*blueprint.scale));
+outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale-portx.jackBase*blueprint.scale+2, blueprint.yPos+portx.length*blueprint.scale+portx.finHeight*blueprint.scale-portx.finHeight/2*blueprint.scale));
+outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale-portx.jackBase*blueprint.scale-2, blueprint.yPos+portx.length*blueprint.scale+portx.finHeight*blueprint.scale-portx.finHeight/2*blueprint.scale));
+outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale-portx.jackBase*blueprint.scale-2+(portx.finHeight*portx.jackBase/(2*portx.jackHeight))*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale+portx.finHeight*blueprint.scale));
+
 outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale/2, blueprint.yPos+portx.length*blueprint.scale+portx.finHeight*blueprint.scale));
-outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale/2, blueprint.yPos+portx.length*blueprint.scale));
+//asdnjsajkdklasdkjl
+outerPath.add(new Point(blueprint.xPos+portx.lockBase*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos, blueprint.yPos+portx.length*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos, blueprint.yPos));
 //outerPath.selected=true;
 
 
 var roundOuterPath = roundedCorner (outerPath, blueprint.scale/3);
-roundOuterPath.strokeColor='black';
+roundOuterPath.strokeColor='#156B78';
 roundOuterPath.strokeWidth= 2;
 
+var guides = new Path();
+guides.add(new Point(blueprint.xPos+portx.width*blueprint.scale-portx.jackBase*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale));
+guides.add(new Point(blueprint.xPos+portx.width*blueprint.scale-portx.jackBase/2*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale+(Math.sqrt(Math.pow(portx.jackHeight*blueprint.scale, 2)-Math.pow(portx.jackBase*blueprint.scale/2, 2)))));
+guides.add(new Point(blueprint.xPos+portx.width*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale));
+guides.strokeColor='red';
 
-function roundedCorner(oPath, radius){//function for Rounded Corners
+var jjjj = new Path.Circle(blueprint.xPos+portx.width*blueprint.scale,blueprint.yPos+portx.length*blueprint.scale,portx.jackHeight*blueprint.scale);
+jjjj.strokeColor='blue';
+
+function roundedCorner(oPath, radius){//function for Rounded Corners ###########
 
   var OriginalRadius = radius;
 
@@ -171,4 +200,4 @@ function roundedCorner(oPath, radius){//function for Rounded Corners
 
   return roundedPath;
 
-}//end of function
+}//end of function #############################################################
