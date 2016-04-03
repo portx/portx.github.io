@@ -1,7 +1,7 @@
 
 var laptop = { length:14, width:10 }; // in inches
-var portx = { length: laptop.length-2, width: laptop.width, jackHeight:6, finHeight:2, jackBase:4, lockBase:2, lockHeight:3 };
-var blueprint = { xPos:70, yPos:100, color:'#156B78', scale:30, strokeThickness:1 };
+var portx = { length: laptop.length-2, width: laptop.width, jackHeight:6, finHeight:2, jackBase:4, lockBase:1.2, lockHeight:0.8 };
+var blueprint = { xPos:150, yPos:100, color:'#156B78', scale:30, strokeThickness:1 };
 
 var line1 = new Path.Line(blueprint.xPos+portx.width*blueprint.scale,blueprint.yPos,blueprint.xPos+portx.width*blueprint.scale,blueprint.yPos+portx.length*blueprint.scale);
 line1.strokeColor='#156B78';
@@ -96,6 +96,14 @@ outerPath.add(new Point(blueprint.xPos+portx.width*blueprint.scale/2, blueprint.
 //asdnjsajkdklasdkjl
 outerPath.add(new Point(blueprint.xPos+portx.lockBase*blueprint.scale, blueprint.yPos+portx.length*blueprint.scale));
 outerPath.add(new Point(blueprint.xPos, blueprint.yPos+portx.length*blueprint.scale));
+//locks
+outerPath.add(new Point(blueprint.xPos, blueprint.yPos+portx.length*blueprint.scale-portx.length*blueprint.scale/4));
+outerPath.add(new Point(blueprint.xPos-(Math.sqrt(Math.pow(portx.lockHeight*blueprint.scale,2)+Math.pow(portx.lockBase*blueprint.scale,2)))-(portx.lockHeight*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale-portx.length*blueprint.scale/4));
+outerPath.add(new Point(blueprint.xPos-(Math.sqrt(Math.pow(portx.lockHeight*blueprint.scale,2)+Math.pow(portx.lockBase*blueprint.scale,2)))-(portx.lockHeight*blueprint.scale)-(portx.lockBase*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale-portx.length*blueprint.scale/4-portx.lockBase*blueprint.scale));
+outerPath.add(new Point(blueprint.xPos-(Math.sqrt(Math.pow(portx.lockHeight*blueprint.scale,2)+Math.pow(portx.lockBase*blueprint.scale,2)))-(portx.lockHeight*blueprint.scale)-(portx.lockBase*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale/4+portx.lockBase*blueprint.scale));
+outerPath.add(new Point(blueprint.xPos-(Math.sqrt(Math.pow(portx.lockHeight*blueprint.scale,2)+Math.pow(portx.lockBase*blueprint.scale,2)))-(portx.lockHeight*blueprint.scale), blueprint.yPos+portx.length*blueprint.scale/4));
+outerPath.add(new Point(blueprint.xPos, blueprint.yPos+portx.length*blueprint.scale/4));
+
 outerPath.add(new Point(blueprint.xPos, blueprint.yPos));
 //outerPath.selected=true;
 
